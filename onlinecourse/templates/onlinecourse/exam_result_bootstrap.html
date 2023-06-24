@@ -39,7 +39,7 @@
     {% if grade > 80 %}
     <div class="alert alert-success">
        <!--HINT Display passed info -->
-       You failed the exam with a score of {{ grade }} / 100.
+       You passed the exam with a score of {{ grade }} / 100.
     </div>
     {% else %}
     <div class="alert alert-danger">
@@ -56,15 +56,19 @@
             <div class="form-group">
                 {% for choice in question.choice_set.all %}
                 <div class="form-check">
-                    {% if choice.is_correct and choice in choices %}
-                    <div class="text-success">Correctly Checked: {{ choice.choice_text }}</div>
-                    {% else %}{% if choice.is_correct and not choice in choices %}
-                    <div class="text-warning">Incorrectly Unchecked: {{ choice.choice_text }}</div>
-                    {% else %}{% if not choice.is_correct and choice in choices %}
-                    <div class="text-danger">Incorrectly Checked: {{ choice.choice_text }}</div>
+                    {% if choice.is_correct %}
+                    {% if choice in choices %}
+                    <div class="text-success">Correctly Checked:     {{ choice.choice_text }}</div>
                     {% else %}
-                    <div>Correctly Unchecked: {{ choice.choice_text }}</div>
-                    {% endif %}{% endif %}{% endif %}
+                    <div class="text-warning">Incorrectly Unchecked: {{ choice.choice_text }}</div>
+                    {% endif %}
+                    {% else %}
+                    {% if choice in choices %}
+                    <div class="text-danger">Incorrectly Checked:   {{ choice.choice_text }}</div>
+                    {% else %}
+                    <div>Correctly Unchecked:   {{ choice.choice_text }}</div>
+                    {% endif %}
+                    {% endif %}
                 </div>
                 {% endfor %}
             </div>
