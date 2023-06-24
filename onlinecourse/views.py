@@ -143,10 +143,12 @@ def show_exam_result(request, course_id, submission_id):
     course = get_object_or_404(Course, pk=course_id)
     submission = Submission.objects.get(id=submission_id)
     choices = submission.choices.all()
+    questions = Question.objects.filter(course=course_id)
     total_score = 0
-    for choice in choices:
-        if choice.is_correct:
-            total_score += choice.question_id.grade
+    for question in questions:
+        choices_for_this_question = choices.filter(question_id=question.pk)
+        if question.is_get_score(choices_for_this_question):
+            total_score += question.grade
     context['course'] = course
     context['choices'] = choices
     context['grade'] = total_score
